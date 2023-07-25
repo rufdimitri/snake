@@ -16,6 +16,7 @@ public class GroessteGemeinsameTeiler {
         int zaehler = 0;
         while (m != n) {
             zaehler++;
+            System.out.format("m = %10d, n = %10d\n", m, n);
             if (m > n) {
                 m -= n;
             } else {
