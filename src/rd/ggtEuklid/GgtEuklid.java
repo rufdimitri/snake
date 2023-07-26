@@ -5,12 +5,10 @@ import javax.swing.JOptionPane;
 public class GgtEuklid {
     public static void main(String[] args) {
         String eingabe;
-        eingabe = JOptionPane.showInputDialog(null,
-                "Bitte N eingeben: ");
+        eingabe = JOptionPane.showInputDialog(null, "Bitte N eingeben: ");
         int n = Integer.parseInt(eingabe);
 
-        eingabe = JOptionPane.showInputDialog(null,
-                "Bitte M eingeben: ");
+        eingabe = JOptionPane.showInputDialog(null, "Bitte M eingeben: ");
         int m = Integer.parseInt(eingabe);
 
         int rest = m % n;
