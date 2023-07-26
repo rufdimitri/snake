@@ -2,6 +2,10 @@ package rd.arrays;
 
 public class Arrays1 {
     public static void main(String[] args) {
+
+    }
+
+    static void arrayBasics() {
         int[] array1 = new int[5];
         array1[0] = 10;
         array1[1] = 20;
