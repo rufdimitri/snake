@@ -106,10 +106,15 @@ public class BubbleSort {
 
         int[] arrayLengthsTestValues = { 1000, 10000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000,
                 140000, 150000, 160000, 170000 };
-        String[] testNames = { "Bubble Sort (BS)", "BS Opt #1", "BS Opt #2", "BS Opt #1 & #2" };
+        // TODO: replace testNames and in if (r == 0) { print("Bubble Sort")} else {
+        // bubbleSort(); }
+        // (in if make output and also the calc the values, so that it is better to
+        // understand and call the right function)
+        // String[] testNames = { "Bubble Sort (BS)", "BS Opt #1", "BS Opt #2", "BS Opt
+        // #1 & #2" };
         for (int r = 0; r < arrayLengthsTestValues.length + 1; r++) { // +1 for first row with captions
             if (r > 0) {
-                testArray = generateArray(arrayLengthsTestValues[r - 1], valuesFrom, valuesTo);
+                intArray = generateArray(arrayLengthsTestValues[r - 1], valuesFrom, valuesTo);
             }
             for (int c = 0; c < testNames.length + 1; c++) { // +1 for first column with arrayLengths
                 if (r == 0 && c == 0) {
