@@ -100,25 +100,53 @@ public class BubbleSort {
     }
 
     static void testInt(int length, int valuesFrom, int valuesTo) {
-        int[] intArray = generateArray(length, valuesFrom, valuesTo);
+        int[] intArray = {};
+        int[] testArray = {};
         long startTime, endTime;
-        int[] testArray;
 
         int[] arrayLengthsTestValues = { 1000, 10000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000,
                 140000, 150000, 160000, 170000 };
         String[] testNames = { "Bubble Sort (BS)", "BS Opt #1", "BS Opt #2", "BS Opt #1 & #2" };
-        for (int i = 0; i < arrayLengthsTestValues.length; i++) {
-            for (int j = 0; j < testNames.length; j++) {
-                if (i == 0 && j > 0) {
-                    System.out.print(testNames[j] + "\t");
-                }
+        for (int r = 0; r < arrayLengthsTestValues.length + 1; r++) { // +1 for first row with captions
+            if (r > 0) {
+                testArray = generateArray(arrayLengthsTestValues[r - 1], valuesFrom, valuesTo);
             }
+            for (int c = 0; c < testNames.length + 1; c++) { // +1 for first column with arrayLengths
+                if (r == 0 && c == 0) {
+                    System.out.format("%20s", "Amount of elements");
+                } else if (r == 0 && c > 0) {
+                    System.out.format("%20s", testNames[c - 1]);
+                } else if (r > 0 && c == 0) {
+                    System.out.format("%20d", arrayLengthsTestValues[r - 1]);
+                } else if (c == 1) { // "Bubble Sort (BS)"
+                    testArray = Arrays.copyOf(intArray, intArray.length);
+                    startTime = System.currentTimeMillis();
+                    bubbleSort(testArray);
+                    endTime = System.currentTimeMillis();
+                    System.out.format("%20d", endTime - startTime);
+                } else if (c == 2) { // "BS Opt #1"
+                    testArray = Arrays.copyOf(intArray, intArray.length);
+                    startTime = System.currentTimeMillis();
+                    bubbleSortOpmimize1(testArray);
+                    endTime = System.currentTimeMillis();
+                    System.out.format("%20d", endTime - startTime);
+                } else if (c == 3) { // "BS Opt #2"
+                    testArray = Arrays.copyOf(intArray, intArray.length);
+                    startTime = System.currentTimeMillis();
+                    bubbleSortOpmimize2(testArray);
+                    endTime = System.currentTimeMillis();
+                    System.out.format("%20d", endTime - startTime);
+                } else if (c == 4) { // "BS Opt #1 & #2"
+                    testArray = Arrays.copyOf(intArray, intArray.length);
+                    startTime = System.currentTimeMillis();
+                    bubbleSortOpmimize1x2(testArray);
+                    endTime = System.currentTimeMillis();
+                    System.out.format("%20d", endTime - startTime);
+                }
+                // System.out.print("\t");
+            }
+            System.out.println();
         }
-        testArray = Arrays.copyOf(intArray, intArray.length);
-        startTime = System.currentTimeMillis();
-        bubbleSortOpmimize1x2(testArray);
-        endTime = System.currentTimeMillis();
-        System.out.println(endTime - startTime);
     }
 
 }
