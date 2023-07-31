@@ -103,6 +103,10 @@ public class BubbleSort {
             return this.name;
         }
 
+        public String getDescription() {
+            return this.description;
+        }
+
         public void sort(int[] array) {
             throw new RuntimeException("Method is not implemented.");
         };
@@ -136,6 +140,11 @@ public class BubbleSort {
         int[] arrayLengthsTestValues = { 1000, 10000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000,
                 140000, 150000, 160000, 170000 };
 
+        System.out.println("Implementations: ");
+        for (Implementation impl : Implementation.implementations) {
+            System.out.println(impl.getName() + ": " + impl.getDescription());
+        }
+
         for (int r = 0; r < arrayLengthsTestValues.length + 1; r++) { // +1 for first row with captions
             if (r > 0) {
                 intArray = generateArray(arrayLengthsTestValues[r - 1], valuesFrom, valuesTo);
@@ -149,13 +158,13 @@ public class BubbleSort {
                 } else if (c > 0) {
                     Implementation impl = Implementation.implementations.get(c - 1);
                     if (r == 0) {
-                        System.out.format("%20s", impl.getName());
+                        System.out.format("%25s", impl.getName());
                     } else {
                         testArray = Arrays.copyOf(intArray, intArray.length);
                         startTime = System.currentTimeMillis();
                         impl.sort(testArray);
                         endTime = System.currentTimeMillis();
-                        System.out.format("%20d", endTime - startTime);
+                        System.out.format("%25d", endTime - startTime);
                     }
                 }
             }
