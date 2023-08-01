@@ -17,7 +17,7 @@ public class FortgeschritteneAufgabe_1 {
 
         int[] array = new int[elementzahl];
         Random rand = new Random();
-        // Array einfüllen mit Zufälligen Zahlen
+        // Array ausfüllen mit Zufälligen Zahlen
         for (int i = 0; i < array.length; i++) {
             array[i] = rand.nextInt(1000);
         }
