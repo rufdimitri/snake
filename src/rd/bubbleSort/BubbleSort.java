@@ -134,7 +134,7 @@ public class BubbleSort {
             if (sorted) {
                 scopeMin = scopeSize * i + valuesMin;
                 scopeMax = scopeMin + scopeSize;
-                array[i] = rand.nextInt(scopeMin, scopeMax); // TODO Fix this random
+                array[i] = rand.nextInt(scopeMin, scopeMax);
             } else {
                 array[i] = rand.nextInt(valuesMin, valuesMax);
             }
