@@ -17,7 +17,7 @@ public class Arrays1 {
         int[] array = new int[groesse];
         Random rand = new Random();
 
-        // Array einfüllen mit Zufällige Zahlen
+        // Array ausfüllen mit Zufällige Zahlen
         for (int i = 0; i < array.length; i++) {
             array[i] = rand.nextInt(100);
         }
