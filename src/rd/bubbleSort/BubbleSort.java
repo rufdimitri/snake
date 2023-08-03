@@ -114,41 +114,97 @@ public class BubbleSort {
     }
 
     public static void main(String[] args) {
-        displayArray(generateArray(100, 50, 100, true));
-        // testInt(5, 0, 1000);
+		runAllTests();
+		testInt(0, 1000, true);
     }
+
+	static void runAllTests() {
+		testGenerateArray();
+		testSort();
+	}
 
     static int[] generateArray(int length, int valuesMin, int valuesMax, boolean sorted) {
         int[] array = new int[length];
         Random rand = new Random();
-        int scopeMin;
-        int scopeMax;
-        int scopeCount = 0;
-        if (length >= (valuesMax - valuesMin)) {
-            scopeCount = 5;
-        } else {
-            scopeCount = length;
+        
+		for (int i = 0; i < array.length; i++) {
+			array[i] = rand.nextInt(valuesMin, valuesMax);
         }
-        int scopeSize = (valuesMax - valuesMin) / scopeCount;
-        for (int i = 0; i < array.length; i++) {
-            if (sorted) {
-                scopeMin = scopeSize * i + valuesMin;
-                scopeMax = scopeMin + scopeSize;
-                array[i] = rand.nextInt(scopeMin, scopeMax);
-            } else {
-                array[i] = rand.nextInt(valuesMin, valuesMax);
-            }
-        }
+
+		if (sorted) {
+			sort(array);
+		}
         return array;
     }
+    
+	static void testGenerateArray() {
+		int[] array = generateArray(10, 0, 1000, false);
+		if (array.length != 10) {
+			throw new RuntimeException("testGenerateArray failed");
+		}
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] < 0 || array[i] > 1000) {
+				throw new RuntimeException("testGenerateArray failed");
+			}
+		}
+
+		// test sorted array
+		int[] array2 = generateArray(10, 0, 1000, true);
+		if (array2.length != 10) {
+			throw new RuntimeException("testGenerateArray failed");
+		}
+		for (int i = 0; i < array2.length; i++) {
+			if (array2[i] < 0 || array2[i] > 1000) {
+				throw new RuntimeException("testGenerateArray failed");
+			}
+		}
+		if (!isSorted(array2)) {
+			throw new RuntimeException("testGenerateArray failed");
+		}
+		System.out.println("testGenerateArray ok");
+	}
+
+	static void sort(int[] array) {
+		int minI;
+		int buffer;
+		for (int k = 0; k < array.length; k++) {
+			minI = k;
+			for (int i = k; i < array.length; i++) {
+				if (array[i] < array[minI]) {
+					minI = i;
+				}
+			}
+			buffer = array[k];
+			array[k] = array[minI];
+			array[minI] = buffer;
+		}
+	}
+
+	static void testSort() {
+		int[] array1 = { 5, 3, 1, 2, 6, 7 };
+		sort(array1);
+		if (!isSorted(array1)) {
+			throw new RuntimeException("testSort failed");
+		}
+		System.out.println("testSort ok");
+	}
+
+	static boolean isSorted(int[] array) {
+		for (int i = 0; i < array.length - 1; i++) {
+			if (array[i] > array[i + 1]) {
+				return false;
+			}
+		}
+		return true;
+	}
 
     static void displayArray(int[] array) {
         for (int i = 0; i < array.length; i++) {
             System.out.println(array[i]);
         }
-    }
+	}
 
-    static void testInt(int length, int valueMin, int valueMax) {
+	static void testInt(int valueMin, int valueMax, boolean sorted) {
         int[] intArray = {};
         int[] testArray = {};
         long startTime, endTime;
@@ -165,7 +221,7 @@ public class BubbleSort {
 
         for (int r = 0; r < arrayLengthsTestValues.length + 1; r++) { // +1 for first row with captions
             if (r > 0) {
-                intArray = generateArray(arrayLengthsTestValues[r - 1], valueMin, valueMax, true);
+				intArray = generateArray(arrayLengthsTestValues[r - 1], valueMin, valueMax, sorted);
             }
             for (int c = 0; c < (Implementation.implementations.size() + 1); c++) { // +1 for first column with
                                                                                     // arrayLengths
