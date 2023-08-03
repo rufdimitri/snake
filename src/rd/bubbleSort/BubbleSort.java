@@ -115,8 +115,9 @@ public class BubbleSort {
 
     public static void main(String[] args) {
 		runAllTests();
-		testInt(0, 1000, false, ;
-		testInt(0, 1000, true, ;
+		// TODO
+//		testInt(0, 1000, false, ;
+//		testInt(0, 1000, true, ;
     }
 
 	static void runAllTests() {
