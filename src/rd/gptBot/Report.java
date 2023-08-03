@@ -1,5 +1,21 @@
 package rd.gptBot;
 
+//Report Beispiel (Report.txt)
+//Abc
+//**************
+//
+//“Vertreter-ID | Vertreter-Name | Auftrags-Nr | Umsatz”
+//“--------------------------------------------------”
+//101 | Alice | 1001 | 5000.0
+//1002 | 3000.0
+//1003 | 4000.0
+//102 | Bob | 1004 | 6000.0
+//1005 | 2000.0
+//103 | Charlie | 1006 | 7000.0
+//1007 | 8000.0
+//1008 | 9000.0
+
+
 // Importieren Sie die Klassen, die wir benötigen 
 import java.util.ArrayList;
 import java.io.PrintWriter;
