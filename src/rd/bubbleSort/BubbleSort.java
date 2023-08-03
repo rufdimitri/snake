@@ -115,7 +115,8 @@ public class BubbleSort {
 
     public static void main(String[] args) {
 		runAllTests();
-		testInt(0, 1000, true);
+		testInt(0, 1000, false, ;
+		testInt(0, 1000, true, ;
     }
 
 	static void runAllTests() {
@@ -123,22 +124,49 @@ public class BubbleSort {
 		testSort();
 	}
 
-    static int[] generateArray(int length, int valuesMin, int valuesMax, boolean sorted) {
-        int[] array = new int[length];
-        Random rand = new Random();
+	/**
+	 * 
+	 * @param valueMin
+	 * @param valueMax
+	 * @param randomValuesStep: "sorted" for sorted array; "unsorted" for unsorted
+	 *                          array; a number (e.g. "10") for sorted array, but
+	 *                          every 10th element will be a random number
+	 *                          (unsorted). See generateArray() method
+	 */
+	static int[] generateArray(int length, int valuesMin, int valuesMax, String randomValuesStep) {
+		int[] array = new int[length];
         
-		for (int i = 0; i < array.length; i++) {
-			array[i] = rand.nextInt(valuesMin, valuesMax);
-        }
-
-		if (sorted) {
+		arrayFill(array, 1, valuesMin, valuesMax);
+		
+		if (randomValuesStep.equals("sorted")) {
 			sort(array);
 		}
+
+		// fill every randomValuesStep value with a random number
+		int step = 0;
+		try {
+			step = Integer.parseInt(randomValuesStep);
+		} catch (NumberFormatException e) {
+			// do nothing
+		}
+		if (step != 0) {
+			arrayFill(array, step, valuesMin, valuesMax);
+		}
+
         return array;
     }
     
+	static void arrayFill(int[] array, int step, int valueMin, int valueMax) {
+		Random rand = new Random();
+		for (int i = 0; i < array.length; i++) {
+			if (i % step == 0) {
+				array[i] = rand.nextInt(valueMin, valueMax);
+			}
+		}
+	}
+
 	static void testGenerateArray() {
-		int[] array = generateArray(10, 0, 1000, false);
+		int[] array = generateArray(10, 0, 1000, "unsorted");
 		if (array.length != 10) {
 			throw new RuntimeException("testGenerateArray failed");
 		}
@@ -149,7 +177,7 @@ public class BubbleSort {
 		}
 
 		// test sorted array
-		int[] array2 = generateArray(10, 0, 1000, true);
+		int[] array2 = generateArray(10, 0, 1000, "sorted");
 		if (array2.length != 10) {
 			throw new RuntimeException("testGenerateArray failed");
 		}
@@ -204,7 +232,16 @@ public class BubbleSort {
         }
 	}
 
-	static void testInt(int valueMin, int valueMax, boolean sorted) {
+	/**
+	 * 
+	 * @param valueMin
+	 * @param valueMax
+	 * @param randomValuesStep: "sorted" for sorted array; "unsorted" for unsorted
+	 *                          array; a number (e.g. "10") for sorted array, but
+	 *                          every 10th element will be a random number
+	 *                          (unsorted). See generateArray() method
+	 */
+	static void testInt(int valueMin, int valueMax, String randomValuesStep) { // TODO
         int[] intArray = {};
         int[] testArray = {};
         long startTime, endTime;
@@ -221,7 +258,7 @@ public class BubbleSort {
 
         for (int r = 0; r < arrayLengthsTestValues.length + 1; r++) { // +1 for first row with captions
             if (r > 0) {
-				intArray = generateArray(arrayLengthsTestValues[r - 1], valueMin, valueMax, sorted);
+				intArray = generateArray(arrayLengthsTestValues[r - 1], valueMin, valueMax, randomValuesStep);
             }
             for (int c = 0; c < (Implementation.implementations.size() + 1); c++) { // +1 for first column with
                                                                                     // arrayLengths
