@@ -30,23 +30,14 @@ public class Rechtecktest {
 		r1.laengeVergroessern(5);
 		System.out.println("Laenge: " + r1.getLaenge());
 
-		/**
-		 * Aufgabe 4
-		 */
 		System.out.println("Breite: " + r1.getBreite());
 		r1.breiteVergroessern(5);
 		System.out.println("Breite: " + r1.getBreite());
 
-		/**
-		 * Aufgabe 4
-		 */
 		System.out.println("Laenge: " + r1.getLaenge());
 		r1.laengeVerkleinern(5);
 		System.out.println("Laenge: " + r1.getLaenge());
 
-		/**
-		 * Aufgabe 4
-		 */
 		System.out.println("Breite: " + r1.getBreite());
 		r1.breiteVerkleinern(5);
 		System.out.println("Breite: " + r1.getBreite());
