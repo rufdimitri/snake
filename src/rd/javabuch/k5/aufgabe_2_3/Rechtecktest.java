@@ -24,6 +24,7 @@ public class Rechtecktest {
 		// die lokale Variable verhindert Zugriff auf Attribute laenge,
 		// weil sie gleichen Namen hat, man kann aber auf Attribut laenge
 		// zugreifen, indem man this.laenge nutzt.
+
 	}
 
 }
