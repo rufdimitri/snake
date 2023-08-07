@@ -1,4 +1,4 @@
-package rd.javabuch.k5.aufgabe_2_3; //k5 = kapitel 5
+package rd.javabuch.k5.aufgabe_2_3_4; //k5 = kapitel 5
 
 public class Rechteck {
 	private double laenge;
@@ -12,6 +12,7 @@ public class Rechteck {
 	public Rechteck(double laenge, double breite) {
 		this.laenge = laenge;
 		this.breite = breite;
+		System.out.format("Constructor(%s, %s)\n", String.valueOf(laenge), String.valueOf(breite));
 	}
 
 	public void setLaenge(double l) {
@@ -75,28 +76,32 @@ public class Rechteck {
 	 * Aufgabe 4
 	 */
 	void laengeVergroessern(double l) {
-
+		laenge += l;
+		System.out.println("laengeVergroessern(" + l + ")");
 	}
 
 	/**
 	 * Aufgabe 4
 	 */
 	void breiteVergroessern(double b) {
-
+		breite += b;
+		System.out.println("breiteVergroessern(" + b + ")");
 	}
 
 	/**
 	 * Aufgabe 4
 	 */
 	void laengeVerkleinern(double l) {
-
+		laenge -= l;
+		System.out.println("laengeVerkleinern(" + l + ")");
 	}
 
 	/**
 	 * Aufgabe 4
 	 */
 	void breiteVerkleinern(double b) {
-
+		breite -= b;
+		System.out.println("breiteVerkleinern(" + b + ")");
 	}
 
 }
