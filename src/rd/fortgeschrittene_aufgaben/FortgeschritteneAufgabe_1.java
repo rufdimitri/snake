@@ -1,4 +1,4 @@
-package rd.arrays;
+package rd.fortgeschrittene_aufgaben;
 
 import java.util.Random;
 
