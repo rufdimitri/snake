@@ -63,4 +63,10 @@ public class Rechteck {
 		return laenge * 2 + breite * 2;
 	}
 
+	// Aufgabe 3
+	void laengeAusgeben() {
+		double laenge = 5.4;
+		System.out.println("Länge: " + laenge);
+	}
+
 }
