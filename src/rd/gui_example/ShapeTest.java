@@ -43,7 +43,7 @@ public class ShapeTest extends JFrame {
 	private Random random = new Random();
 
 	public static void main(String[] args) {
-		// you should always use the SwingUtilities.invodeLater() method
+		// you should always use the SwingUtilities.invokeLater() method
 		// to perform actions on swing elements to make certain everything
 		// is happening on the correct swing thread
 		Runnable swingStarter = new Runnable() {
