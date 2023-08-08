@@ -1,26 +1,20 @@
 package rd.fractal;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import javax.swing.SwingUtilities;
 
 public class Main {
+	static GUIFrame frame;
 
 	public static void main(String[] args) throws InterruptedException {
-		GUIFrame frame = new GUIFrame(500, 500);
-		ExecutorService executor = Executors.newFixedThreadPool(2);
-		executor.execute(new Runnable() {
+		Runnable guiTask = new Runnable() {
 			@Override
 			public void run() {
-				frame.showGui();
+				frame = new GUIFrame(500, 500);
 			}
-		});
-		while (!frame.isVisible()) {
-			Thread.sleep(1);
-		}
-		Fractal fractal = new Fractal();
-		for (int i = 0; i < 5; i++) {
-			frame.drawPoint(new Point(i, i * i));
-		}
+		};
+
+		SwingUtilities.invokeLater(guiTask);
+
 	}
 
 }
