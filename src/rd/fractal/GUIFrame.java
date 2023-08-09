@@ -32,7 +32,7 @@ public class GUIFrame extends JFrame {
 	private JLabel contextRender;
 	private Stroke dashedStroke = new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 2f,
 			new float[] { 3f, 3f }, 0f);
-	private Stroke solidStroke = new BasicStroke(3.0f);
+	private Stroke solidStroke = new BasicStroke(1.5f);
 	private RenderingHints antialiasing;
 	private Random random = new Random();
 
@@ -83,12 +83,17 @@ public class GUIFrame extends JFrame {
 
 		// set up the circle
 		Point2D circleCenter = new Point2D.Double((double) width / 2 + padding, (double) height / 2 + padding);
-		double circleRadius = (double) random.nextDouble(100);
+		double circleRadius = 5;
 		Ellipse2D circle = getCircleByCenter(circleCenter, circleRadius);
 
 		// draw the two center lines lines
-//		g2d.setStroke(dashedStroke);
-		g2d.setColor(new Color(0, 200, 0));
+		g2d.setStroke(solidStroke);
+
+		// fill Background
+		g2d.setColor(Color.GRAY);
+		g2d.fill(circle);
+		// draw Stroke
+		g2d.setColor(Color.DARK_GRAY);
 		g2d.draw(circle);
 
 		g2d.dispose();
