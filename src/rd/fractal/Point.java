@@ -19,8 +19,8 @@ public class Point {
 	}
 
 	public void add(Point p) {
-		x += p.x;
-		y += p.y;
+		x = x + p.x;
+		y = y + p.y;
 	}
 
 }
