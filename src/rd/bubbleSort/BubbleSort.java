@@ -8,16 +8,10 @@ import java.util.Random;
 public class BubbleSort {
 
 	public static void main(String[] args) {
-		runAllTests();
-		testInt(0, 1000, new SortParam(false));
-		testInt(0, 1000, new SortParam(true));
-		testInt(0, 1000, new SortParam(true, 10));
+		sortInt(0, 1000, new SortParam(false));
+		sortInt(0, 1000, new SortParam(true));
+		sortInt(0, 1000, new SortParam(true, 10));
 
-	}
-
-	static void runAllTests() {
-		testGenerateArray();
-		testSort();
 	}
 
 	static class Implementation {
@@ -198,33 +192,6 @@ public class BubbleSort {
 		}
 	}
 
-	static void testGenerateArray() {
-		int[] array = generateArray(10, 0, 1000, new SortParam(false));
-		if (array.length != 10) {
-			throw new RuntimeException("testGenerateArray failed");
-		}
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] < 0 || array[i] > 1000) {
-				throw new RuntimeException("testGenerateArray failed");
-			}
-		}
-
-		// test sorted array
-		int[] array2 = generateArray(10, 0, 1000, new SortParam(true));
-		if (array2.length != 10) {
-			throw new RuntimeException("testGenerateArray failed");
-		}
-		for (int i = 0; i < array2.length; i++) {
-			if (array2[i] < 0 || array2[i] > 1000) {
-				throw new RuntimeException("testGenerateArray failed");
-			}
-		}
-		if (!isSorted(array2)) {
-			throw new RuntimeException("testGenerateArray failed");
-		}
-		System.out.println("testGenerateArray ok");
-	}
-
 	static void sort(int[] array) {
 		int minI;
 		int buffer;
@@ -239,15 +206,6 @@ public class BubbleSort {
 			array[k] = array[minI];
 			array[minI] = buffer;
 		}
-	}
-
-	static void testSort() {
-		int[] array1 = { 5, 3, 1, 2, 6, 7 };
-		sort(array1);
-		if (!isSorted(array1)) {
-			throw new RuntimeException("testSort failed");
-		}
-		System.out.println("testSort ok");
 	}
 
 	static boolean isSorted(int[] array) {
@@ -274,7 +232,7 @@ public class BubbleSort {
 	 *                          every 10th element will be a random number
 	 *                          (unsorted). See generateArray() method
 	 */
-	static void testInt(int valueMin, int valueMax, SortParam sortParam) { // TODO
+	static void sortInt(int valueMin, int valueMax, SortParam sortParam) { // TODO
 		int[] intArray = {};
 		int[] testArray = {};
 		long startTime, endTime;
@@ -294,7 +252,7 @@ public class BubbleSort {
 				intArray = generateArray(arrayLengthsTestValues[r - 1], valueMin, valueMax, sortParam);
 			}
 			for (int c = 0; c < (Implementation.implementations.size() + 1); c++) { // +1 for first column with
-																					// arrayLengths
+																					 // arrayLengths
 				if (r == 0 && c == 0) {
 					System.out.format("%20s", "Amount of elements");
 				} else if (r > 0 && c == 0) {
