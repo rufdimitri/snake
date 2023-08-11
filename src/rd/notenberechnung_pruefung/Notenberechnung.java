@@ -60,12 +60,14 @@ public class Notenberechnung {
 			int ap2FachGespraechPunkte, int nachpruefungPunkte) {
 
 		int ergebnis = berechnen(ap1Punkte, ap21Punkte, ap22Punkte, ap23Punkte, ap2DokuPunkte, ap2FachGespraechPunkte);
-		if (ergebnis == 0) {
+
+		if (ergebnis == 0) { // 0 - nicht bestanden
+			// überprüfe mögliche Nachprüfungen
 			int ap21PunkteNachpruefung = (int) Math.round((ap21Punkte * 2 + nachpruefungPunkte * 1) / 3);
 			int ergebnisNachpruefung1 = berechnen(ap1Punkte, ap21PunkteNachpruefung, ap22Punkte, ap23Punkte,
 					ap2DokuPunkte, ap2FachGespraechPunkte);
 
-			if (ergebnisNachpruefung1 > 0) {
+			if (ergebnisNachpruefung1 > 0) { // > 0 - bestanden
 				return new Note(false, 0, true, ergebnisNachpruefung1);
 			}
 
@@ -73,7 +75,7 @@ public class Notenberechnung {
 			int ergebnisNachpruefung2 = berechnen(ap1Punkte, ap21Punkte, ap22PunkteNachpruefung, ap23Punkte,
 					ap2DokuPunkte, ap2FachGespraechPunkte);
 
-			if (ergebnisNachpruefung2 > 0) {
+			if (ergebnisNachpruefung2 > 0) { // > 0 - bestanden
 				return new Note(false, 0, true, ergebnisNachpruefung2);
 			}
 
@@ -81,10 +83,11 @@ public class Notenberechnung {
 			int ergebnisNachpruefung3 = berechnen(ap1Punkte, ap21Punkte, ap22Punkte, ap23PunkteNachpruefung,
 					ap2DokuPunkte, ap2FachGespraechPunkte);
 
-			if (ergebnisNachpruefung3 > 0) {
+			if (ergebnisNachpruefung3 > 0) { // > 0 - bestanden
 				return new Note(false, 0, true, ergebnisNachpruefung3);
 			}
 
+			// keine von Nachprüfungen war erfolgreich
 			return new Note(false, 0, false, 0);
 
 		} else {
