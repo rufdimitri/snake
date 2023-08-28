@@ -6,6 +6,88 @@ public class Car {
 	double length;
 	double width;
 	double height;
+
+	public Car(String color, int doors, double length, double width, double height, double weight, int wheels,
+			int driveWheels) {
+		super();
+		this.color = color;
+		this.doors = doors;
+		this.length = length;
+		this.width = width;
+		this.height = height;
+		this.weight = weight;
+		this.wheels = wheels;
+		this.driveWheels = driveWheels;
+	}
+
+	public Car() {
+
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public int getDoors() {
+		return doors;
+	}
+
+	public void setDoors(int doors) {
+		this.doors = doors;
+	}
+
+	public double getLength() {
+		return length;
+	}
+
+	public void setLength(double length) {
+		this.length = length;
+	}
+
+	public double getWidth() {
+		return width;
+	}
+
+	public void setWidth(double width) {
+		this.width = width;
+	}
+
+	public double getHeight() {
+		return height;
+	}
+
+	public void setHeight(double height) {
+		this.height = height;
+	}
+
+	public double getWeight() {
+		return weight;
+	}
+
+	public void setWeight(double weight) {
+		this.weight = weight;
+	}
+
+	public int getWheels() {
+		return wheels;
+	}
+
+	public void setWheels(int wheels) {
+		this.wheels = wheels;
+	}
+
+	public int getDriveWheels() {
+		return driveWheels;
+	}
+
+	public void setDriveWheels(int driveWheels) {
+		this.driveWheels = driveWheels;
+	}
+
 	double weight;
 	int wheels;
 	int driveWheels;
@@ -58,6 +140,12 @@ public class Car {
 	public String toString() {
 		return "Car [color=" + color + ", doors=" + doors + ", length=" + length + ", width=" + width + ", height="
 				+ height + ", weight=" + weight + ", wheels=" + wheels + ", driveWheels=" + driveWheels + "]";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		return super.equals(obj);
 	}
 
 }
