@@ -38,7 +38,7 @@ public class GUIFrame extends JFrame {
 
 	private int repaintInterval = 25;
 
-	Snake snake = new Snake(new Point2D.Double(0, 0));
+	Snake snake = new Snake();
 
 	final ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(1);
 	final Runnable gameTickTask = () -> gameTick();
