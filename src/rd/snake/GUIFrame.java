@@ -11,6 +11,8 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -50,6 +52,7 @@ public class GUIFrame extends JFrame {
 		this.pack();
 		this.setLocationRelativeTo(null); // place window in center of screen
 		this.paint();
+		setRefreshTimer();
 
 		setVisible(true);
 	}
@@ -80,6 +83,20 @@ public class GUIFrame extends JFrame {
 		g2d.dispose();
 		// force the container for the context to re-paint itself
 		contextRender.repaint();
+
+	}
+
+	private void setRefreshTimer() {
+		new Timer().schedule(new TimerTask() {
+			@Override
+			public void run() {
+				refresh();
+			}
+
+		}, 1000, 1000);
+	}
+
+	public void refresh() {
 
 	}
 
