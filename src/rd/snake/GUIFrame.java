@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
-import java.awt.TextArea;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -61,40 +60,39 @@ public class GUIFrame extends JFrame {
 		// take advantage of auto-sizing the window based on the size of its contents
 		this.pack();
 		this.setLocationRelativeTo(null); // place window in center of screen
-		this.paint();
 
 		gameTick();
 		setVisible(true);
 	}
 
-	public void paint() {
-
-		Graphics2D g2d = graphicsContext.createGraphics();
-		g2d.setRenderingHints(antialiasing);
-
-		// clear the background
-		g2d.setColor(Color.BLACK);
-		g2d.fillRect(0, 0, graphicsContext.getWidth(), graphicsContext.getHeight());
-
-		// set up the circle
-		double circleRadius = 5;
-//		for (Point point : fractal.points) {
-//			Point2D circleCenter = new Point2D.Double(point.x, point.y);
-//			Ellipse2D circle = getCircleByCenter(circleCenter, circleRadius);
-//			// fill Background
-//			g2d.setColor(Color.GRAY);
-//			g2d.fill(circle);
-//			// draw Stroke
-//			g2d.setColor(Color.DARK_GRAY);
-//			g2d.draw(circle);
+//	public void paint() {
 //
-//		}
-
-		g2d.dispose();
-		// force the container for the context to re-paint itself
-		contextRender.repaint();
-
-	}
+//		Graphics2D g2d = graphicsContext.createGraphics();
+//		g2d.setRenderingHints(antialiasing);
+//
+//		// clear the background
+//		g2d.setColor(Color.BLACK);
+//		g2d.fillRect(0, 0, graphicsContext.getWidth(), graphicsContext.getHeight());
+//
+//		// set up the circle
+//		double circleRadius = 5;
+////		for (Point point : fractal.points) {
+////			Point2D circleCenter = new Point2D.Double(point.x, point.y);
+////			Ellipse2D circle = getCircleByCenter(circleCenter, circleRadius);
+////			// fill Background
+////			g2d.setColor(Color.GRAY);
+////			g2d.fill(circle);
+////			// draw Stroke
+////			g2d.setColor(Color.DARK_GRAY);
+////			g2d.draw(circle);
+////
+////		}
+//
+//		g2d.dispose();
+//		// force the container for the context to re-paint itself
+//		contextRender.repaint();
+//
+//	}
 
 	double rotation = 0;
 
@@ -114,8 +112,6 @@ public class GUIFrame extends JFrame {
 		g2d.setColor(Color.GREEN);
 		g2d.draw(head);
 
-		TextArea text = new TextArea(String.valueOf(rotation));
-//		g2d.rotate(0, head.x, head.y);
 		contextRender.repaint();
 		executor.schedule(swingInvokeTickTask, repaintInterval, TimeUnit.MILLISECONDS);
 	}
