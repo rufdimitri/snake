@@ -6,18 +6,22 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.awt.TextArea;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /**
  * https://stackoverflow.com/questions/22573385/java-draw-circle-and-lines-on-swing
@@ -33,7 +37,13 @@ public class GUIFrame extends JFrame {
 	private RenderingHints antialiasing;
 	private Random random = new Random();
 
-	private int repaintInterval = 1000;
+	private int repaintInterval = 25;
+
+	Snake snake = new Snake(new Point2D.Double(0, 0));
+
+	final ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(1);
+	final Runnable gameTickTask = () -> gameTick();
+	final Runnable swingInvokeTickTask = () -> SwingUtilities.invokeLater(gameTickTask);
 
 	public GUIFrame(int width, int height) {
 		antialiasing = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -52,8 +62,8 @@ public class GUIFrame extends JFrame {
 		this.pack();
 		this.setLocationRelativeTo(null); // place window in center of screen
 		this.paint();
-		setRefreshTimer();
 
+		gameTick();
 		setVisible(true);
 	}
 
@@ -86,18 +96,28 @@ public class GUIFrame extends JFrame {
 
 	}
 
-	private void setRefreshTimer() {
-		new Timer().schedule(new TimerTask() {
-			@Override
-			public void run() {
-				refresh();
-			}
+	double rotation = 0;
 
-		}, 1000, 1000);
-	}
+	public void gameTick() {
+		Graphics2D g2d = (Graphics2D) graphicsContext.getGraphics();
+		g2d.addRenderingHints(antialiasing);
 
-	public void refresh() {
+		Rectangle2D.Double background = new Rectangle2D.Double(0, 0, graphicsContext.getWidth(),
+				graphicsContext.getHeight());
+		g2d.setColor(Color.BLACK);
+		g2d.fill(background);
 
+		Rectangle2D.Double head = new Rectangle2D.Double(50, 50, 30, 15);
+
+		g2d.rotate(rotation, head.getCenterX(), head.getCenterY());
+		rotation += Math.PI / 180 * 1;
+		g2d.setColor(Color.GREEN);
+		g2d.draw(head);
+
+		TextArea text = new TextArea(String.valueOf(rotation));
+//		g2d.rotate(0, head.x, head.y);
+		contextRender.repaint();
+		executor.schedule(swingInvokeTickTask, repaintInterval, TimeUnit.MILLISECONDS);
 	}
 
 	private Line2D getVector(Point2D start, double degrees, double length) {
