@@ -6,6 +6,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -44,6 +46,46 @@ public class GUIFrame extends JFrame {
 	final Runnable gameTickTask = () -> gameTick();
 	final Runnable swingInvokeTickTask = () -> SwingUtilities.invokeLater(gameTickTask);
 
+	Point2D.Double center;
+
+	final KeyListener keyListener = new KeyListener() {
+		final int K_LEFT = 37;
+		final int K_TOP = 38;
+		final int K_RIGHT = 39;
+		double rotationSpeed = Math.toRadians(11);
+		double moveSpeed = 1;
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			switch (e.getKeyCode()) {
+			case K_LEFT: {
+				snake.getHead().rotation -= rotationSpeed;
+				break;
+			}
+			case K_RIGHT: {
+				snake.getHead().rotation += rotationSpeed;
+				break;
+			}
+			case K_TOP: {
+				Point2D.Double pos = snake.getHead().position;
+				Point2D.Double newPos = new Point2D.Double(pos.x, pos.y - moveSpeed);
+				snake.getHead().position = rotatePoint(newPos, pos, snake.getHead().rotation);
+				break;
+			}
+
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			System.out.println("keyReleased: " + e.getKeyCode());
+		}
+	};
+
 	public GUIFrame(int width, int height) {
 		antialiasing = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		graphicsContext = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -61,6 +103,10 @@ public class GUIFrame extends JFrame {
 		this.pack();
 		this.setLocationRelativeTo(null); // place window in center of screen
 
+		center = new Point2D.Double(width / 2, height / 2);
+
+		this.addKeyListener(keyListener);
+		snake.getSegments().add(new Snake.Segment(center, 0));
 		gameTick();
 		setVisible(true);
 	}
@@ -105,12 +151,20 @@ public class GUIFrame extends JFrame {
 		g2d.setColor(Color.BLACK);
 		g2d.fill(background);
 
-		Rectangle2D.Double head = new Rectangle2D.Double(50, 50, 30, 15);
+//		Rectangle2D.Double head = new Rectangle2D.Double(50, 50, 30, 15);
 
-		g2d.rotate(rotation, head.getCenterX(), head.getCenterY());
-		rotation += Math.PI / 180 * 1;
+//		g2d.rotate(rotation, head.getCenterX(), head.getCenterY());
+//		rotation += Math.PI / 180 * 1;
+
+		Snake.Segment head = snake.getHead();
+		// Create Segment-Rectangle
+		Point2D.Double rectangleCorner = new Point2D.Double(head.position.x + 20, head.position.y - 10);
+		Rectangle2D.Double headRect = new Rectangle2D.Double();
+		headRect.setFrameFromCenter(head.position, rectangleCorner);
+
+		g2d.rotate(head.rotation, head.position.x, head.position.y);
 		g2d.setColor(Color.GREEN);
-		g2d.draw(head);
+		g2d.draw(headRect);
 
 		contextRender.repaint();
 		executor.schedule(swingInvokeTickTask, repaintInterval, TimeUnit.MILLISECONDS);
@@ -140,6 +194,21 @@ public class GUIFrame extends JFrame {
 		double y = absoluteY(center.getY() - radius);
 		Ellipse2D.Double myCircle = new Ellipse2D.Double(x, y, 2 * radius, 2 * radius);
 		return myCircle;
+	}
+
+	// A method that takes two points (p and o) and an angle (theta) in radians, and
+	// returns a new point that is the result of rotating p around o by theta
+	public Point2D.Double rotatePoint(Point2D.Double p, Point2D.Double anchorPoint, double theta) {
+		// Calculate the difference between the coordinates of p and o
+		double dx = p.x - anchorPoint.x;
+		double dy = p.y - anchorPoint.y;
+
+		// Apply the rotation matrix formula to get the new coordinates of p'
+		double x = Math.cos(theta) * dx - Math.sin(theta) * dy + anchorPoint.x;
+		double y = Math.sin(theta) * dx + Math.cos(theta) * dy + anchorPoint.y;
+
+		// Create and return a new point with the new coordinates
+		return new Point2D.Double(x, y);
 	}
 
 }
