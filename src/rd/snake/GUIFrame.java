@@ -24,9 +24,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-/**
- * https://stackoverflow.com/questions/22573385/java-draw-circle-and-lines-on-swing
- */
 public class GUIFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private BufferedImage graphicsContext;
