@@ -49,8 +49,8 @@ public class GUIFrame extends JFrame {
 		final int K_LEFT = 37;
 		final int K_TOP = 38;
 		final int K_RIGHT = 39;
-		double rotationSpeed = Math.toRadians(11);
-		double moveSpeed = 1;
+		double rotationSpeed = Math.toRadians(1);
+		double moveSpeed = 10;
 
 		@Override
 		public void keyTyped(KeyEvent e) {
@@ -104,6 +104,7 @@ public class GUIFrame extends JFrame {
 
 		this.addKeyListener(keyListener);
 		snake.getSegments().add(new Snake.Segment(center, 0));
+		snake.addSegments(3);
 		gameTick();
 		setVisible(true);
 	}
@@ -153,15 +154,16 @@ public class GUIFrame extends JFrame {
 //		g2d.rotate(rotation, head.getCenterX(), head.getCenterY());
 //		rotation += Math.PI / 180 * 1;
 
-		Snake.Segment head = snake.getHead();
-		// Create Segment-Rectangle
-		Point2D.Double rectangleCorner = new Point2D.Double(head.position.x + 20, head.position.y - 10);
-		Rectangle2D.Double headRect = new Rectangle2D.Double();
-		headRect.setFrameFromCenter(head.position, rectangleCorner);
+		for (Snake.Segment segment : snake.getSegments()) {
+			// Create Segment-Rectangle
+			Point2D.Double rectangleCorner = new Point2D.Double(segment.position.x + 20, segment.position.y - 10);
+			Rectangle2D.Double headRect = new Rectangle2D.Double();
+			headRect.setFrameFromCenter(segment.position, rectangleCorner);
 
-		g2d.rotate(head.rotation, head.position.x, head.position.y);
-		g2d.setColor(Color.GREEN);
-		g2d.draw(headRect);
+			g2d.rotate(segment.rotation, segment.position.x, segment.position.y);
+			g2d.setColor(Color.GREEN);
+			g2d.draw(headRect);
+		}
 
 		contextRender.repaint();
 		executor.schedule(swingInvokeTickTask, repaintInterval, TimeUnit.MILLISECONDS);
