@@ -43,6 +43,8 @@ public class GUIFrame extends JFrame {
 	final Runnable gameTickTask = () -> gameTick();
 	final Runnable swingInvokeTickTask = () -> SwingUtilities.invokeLater(gameTickTask);
 
+	Color backgroundColor = Color.BLACK;
+
 	Point2D.Double center;
 
 	final KeyListener keyListener = new KeyListener() {
@@ -84,7 +86,8 @@ public class GUIFrame extends JFrame {
 		}
 	};
 
-	public GUIFrame(int width, int height) {
+	public GUIFrame(int width, int height, Color background) {
+		this.backgroundColor = background;
 		antialiasing = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		graphicsContext = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		contextRender = new JLabel(new ImageIcon(graphicsContext));
@@ -147,7 +150,7 @@ public class GUIFrame extends JFrame {
 
 		Rectangle2D.Double background = new Rectangle2D.Double(0, 0, graphicsContext.getWidth(),
 				graphicsContext.getHeight());
-		g2d.setColor(Color.BLACK);
+		g2d.setColor(backgroundColor);
 		g2d.fill(background);
 
 //		Rectangle2D.Double head = new Rectangle2D.Double(50, 50, 30, 15);
