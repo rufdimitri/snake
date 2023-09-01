@@ -6,16 +6,27 @@ import java.util.Objects;
 
 public class Snake {
 	private LinkedList<Segment> segments = new LinkedList<>();
-	public Snake.Segment prevHeadPosition;
+	public Snake.Segment updatedTailHead;
 
 	public static class Segment {
-		public Point2D.Double position;
-		public double rotation; // angle in radian
+		private Point2D.Double position = new Point2D.Double();
+		private double rotation; // angle in radian
+
+		private Point2D.Double prevPosition;
+		private double prevRotation; // angle in radian
+
+		public Segment() {
+		}
 
 		public Segment(Point2D.Double position, double rotation) {
 			super();
-			this.position = position;
+			this.position.x = position.x;
+			this.position.y = position.y;
 			this.rotation = rotation;
+		}
+
+		public Segment(Segment other) {
+			this(other.position, other.rotation);
 		}
 
 		@Override
@@ -32,10 +43,87 @@ public class Snake {
 			if (getClass() != obj.getClass())
 				return false;
 			Segment other = (Segment) obj;
-			return position.x - other.position.x < 0.01 && position.y - other.position.y < 0.01
-					&& rotation - other.rotation < 0.01;
+			return Objects.equals(position, other.position)
+					&& Double.doubleToLongBits(rotation) == Double.doubleToLongBits(other.rotation);
 		}
 
+		public boolean positionEquals(Segment other) {
+			if (this == other)
+				return true;
+			if (other == null)
+				return false;
+			double delta = 0.01;
+			return Math.abs(position.x - other.position.x) < delta && Math.abs(position.y - other.position.y) < delta;
+		}
+
+		public void setPositionFrom(Segment other) {
+			if (other != null) {
+				setPosition(other.position.x, other.position.y, other.rotation);
+			}
+		}
+
+		public void setPosition(Point2D.Double position) {
+			setPosition(position.x, position.y);
+		}
+
+		public Point2D.Double getPosition() {
+			if (position == null) {
+				return null;
+			}
+			// give a new Object, to protect the "position" field from changes
+			return new Point2D.Double(position.x, position.y);
+		}
+
+		public Point2D.Double getPrevPosition() {
+			if (prevPosition == null) {
+				return null;
+			}
+			// give a new Object, to protect the "position" field from changes
+			return new Point2D.Double(prevPosition.x, prevPosition.y);
+		}
+
+		public void setPosition(double x, double y, double rotation) {
+			if (this.position == null) {
+				this.position = new Point2D.Double();
+			} else {
+				if (this.prevPosition == null) {
+					this.prevPosition = new Point2D.Double();
+				}
+				this.prevPosition.x = this.position.x;
+				this.prevPosition.y = this.position.y;
+				this.prevRotation = this.rotation;
+			}
+			this.position.x = x;
+			this.position.y = y;
+			this.rotation = rotation;
+		}
+
+		public void setPosition(double x, double y) {
+			if (this.position == null) {
+				this.position = new Point2D.Double();
+			} else {
+				if (this.prevPosition == null) {
+					this.prevPosition = new Point2D.Double();
+				}
+				this.prevPosition.x = this.position.x;
+				this.prevPosition.y = this.position.y;
+			}
+			this.position.x = x;
+			this.position.y = y;
+		}
+
+		public void rotate(double deltaTheta) {
+			this.prevRotation = this.rotation;
+			this.rotation += deltaTheta;
+		}
+
+		public double getRotation() {
+			return rotation;
+		}
+
+		public double getPrevRotation() {
+			return prevRotation;
+		}
 	}
 
 	public LinkedList<Segment> getSegments() {
@@ -47,30 +135,27 @@ public class Snake {
 	}
 
 	public void updateTailPosition() {
-		if (prevHeadPosition != null && prevHeadPosition.position.x == getHead().position.x
-				&& prevPosition.y == getHead().position.y) {
+		// check if position changed
+		if (updatedTailHead != null && updatedTailHead.positionEquals(getHead())) {
 			return;
 		}
+		updatedTailHead = new Snake.Segment(getHead());
+
 		Segment prevSegment = null;
 		for (Segment segment : segments) {
-			if (prevSegment == null) {
-				prevSegment = segment;
-			} else if (prevSegment == getHead()) {
-				segment.position.x = prevPosition.x;
-				segment.position.y = prevPosition.y;
-			} else {
-				segment.position.x = prevSegment.position.x;
-				segment.position.y = prevSegment.position.y;
+			if (segment != getHead()) {
+				Point2D.Double prevPosition = prevSegment.getPrevPosition();
+				if (prevPosition != null) {
+					segment.setPosition(prevPosition.x, prevPosition.y, prevSegment.getPrevRotation());
+				}
 			}
+			prevSegment = segment;
 		}
-		prevPosition = new Point2D.Double(getHead().position.x, getHead().position.y);
 	}
 
 	public void addSegments(int count) {
 		for (int i = 0; i < count; i++) {
-			Point2D.Double position = new Point2D.Double(getHead().position.x, getHead().position.y);
-			double rotation = getHead().rotation;
-			segments.add(new Segment(position, rotation));
+			segments.add(new Segment(getHead()));
 		}
 	}
 

@@ -49,7 +49,7 @@ public class GUIFrame extends JFrame {
 		final int K_LEFT = 37;
 		final int K_TOP = 38;
 		final int K_RIGHT = 39;
-		double rotationSpeed = Math.toRadians(1);
+		double rotationSpeed = Math.toRadians(10);
 		double moveSpeed = 10;
 
 		@Override
@@ -60,17 +60,18 @@ public class GUIFrame extends JFrame {
 		public void keyPressed(KeyEvent e) {
 			switch (e.getKeyCode()) {
 			case K_LEFT: {
-				snake.getHead().rotation -= rotationSpeed;
+				snake.getHead().rotate(-rotationSpeed);
 				break;
 			}
 			case K_RIGHT: {
-				snake.getHead().rotation += rotationSpeed;
+				snake.getHead().rotate(+rotationSpeed);
 				break;
 			}
 			case K_TOP: {
-				Point2D.Double pos = snake.getHead().position;
+				Point2D.Double pos = snake.getHead().getPosition();
 				Point2D.Double newPos = new Point2D.Double(pos.x, pos.y - moveSpeed);
-				snake.getHead().position = rotatePoint(newPos, pos, snake.getHead().rotation);
+				Point2D.Double newPosRotated = rotatePoint(newPos, pos, snake.getHead().getRotation());
+				snake.getHead().setPosition(newPosRotated);
 				break;
 			}
 
@@ -104,7 +105,7 @@ public class GUIFrame extends JFrame {
 
 		this.addKeyListener(keyListener);
 		snake.getSegments().add(new Snake.Segment(center, 0));
-		snake.addSegments(3);
+		snake.addSegments(10);
 		gameTick();
 		setVisible(true);
 	}
@@ -155,15 +156,21 @@ public class GUIFrame extends JFrame {
 //		rotation += Math.PI / 180 * 1;
 
 		for (Snake.Segment segment : snake.getSegments()) {
+			Point2D.Double segmentPos = segment.getPosition();
 			// Create Segment-Rectangle
-			Point2D.Double rectangleCorner = new Point2D.Double(segment.position.x + 20, segment.position.y - 10);
+			Point2D.Double rectangleCorner = new Point2D.Double(segmentPos.x + 5, segmentPos.y - 10);
 			Rectangle2D.Double headRect = new Rectangle2D.Double();
-			headRect.setFrameFromCenter(segment.position, rectangleCorner);
+			headRect.setFrameFromCenter(segmentPos, rectangleCorner);
 
-			g2d.rotate(segment.rotation, segment.position.x, segment.position.y);
+			g2d.rotate(segment.getRotation(), segmentPos.x, segmentPos.y);
 			g2d.setColor(Color.GREEN);
 			g2d.draw(headRect);
+//			g2d.setColor(Color.GREEN);
+//			g2d.fill(headRect);
+			g2d.rotate(-segment.getRotation(), segmentPos.x, segmentPos.y);
 		}
+
+		snake.updateTailPosition();
 
 		contextRender.repaint();
 		executor.schedule(swingInvokeTickTask, repaintInterval, TimeUnit.MILLISECONDS);
