@@ -107,8 +107,8 @@ public class GUIFrame extends JFrame {
 		center = new Point2D.Double(width / 2, height / 2);
 
 		this.addKeyListener(keyListener);
-		snake.getSegments().add(new Snake.Segment(center, 0));
-		snake.addSegments(10);
+		snake.getSegments().add(new Snake.Segment(center, 0)); // manually add head in center of window
+		snake.addSegments(10); // add other segments automatically
 		gameTick();
 		setVisible(true);
 	}
