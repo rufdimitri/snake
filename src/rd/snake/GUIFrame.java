@@ -47,6 +47,10 @@ public class GUIFrame extends JFrame {
 
 	Point2D.Double center;
 
+	boolean isKeyLeftPressed = false;
+	boolean isKeyUpPressed = false;
+	boolean isKeyRightPressed = false;
+
 	final KeyListener keyListener = new KeyListener() {
 		final int K_LEFT = 37;
 		final int K_TOP = 38;
@@ -61,28 +65,44 @@ public class GUIFrame extends JFrame {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			switch (e.getKeyCode()) {
-			case K_LEFT: {
-				snake.getHead().rotate(-rotationSpeed);
-				break;
-			}
-			case K_RIGHT: {
-				snake.getHead().rotate(+rotationSpeed);
-				break;
-			}
-			case K_TOP: {
-				Point2D.Double pos = snake.getHead().getPosition();
-				Point2D.Double newPos = new Point2D.Double(pos.x, pos.y - moveSpeed);
-				Point2D.Double newPosRotated = rotatePoint(newPos, pos, snake.getHead().getRotation());
-				snake.getHead().setPosition(newPosRotated);
-				break;
-			}
-
+				case K_LEFT: {
+					isKeyLeftPressed = true;
+//				snake.getHead().rotate(-rotationSpeed);
+					break;
+				}
+				case K_RIGHT: {
+					isKeyRightPressed = true;
+//				snake.getHead().rotate(+rotationSpeed);
+					break;
+				}
+				case K_TOP: {
+					isKeyUpPressed = true;
+//				Point2D.Double pos = snake.getHead().getPosition();
+//				Point2D.Double newPos = new Point2D.Double(pos.x, pos.y - moveSpeed);
+//				Point2D.Double newPosRotated = rotatePoint(newPos, pos, snake.getHead().getRotation());
+//				snake.getHead().setPosition(newPosRotated);
+					break;
+				}
 			}
 		}
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			System.out.println("keyReleased: " + e.getKeyCode());
+			switch (e.getKeyCode()) {
+				case K_LEFT: {
+					isKeyLeftPressed = false;
+					break;
+				}
+				case K_RIGHT: {
+					isKeyRightPressed = false;
+					break;
+				}
+				case K_TOP: {
+					isKeyUpPressed = false;
+					break;
+				}
+
+			}
 		}
 	};
 
@@ -145,6 +165,11 @@ public class GUIFrame extends JFrame {
 	double rotation = 0;
 
 	public void gameTick() {
+		// TODO
+		isKeyLeftPressed = true;
+		snake.getHead().rotate(-rotationSpeed);
+
+		// Graphics:
 		Graphics2D g2d = (Graphics2D) graphicsContext.getGraphics();
 		g2d.addRenderingHints(antialiasing);
 
