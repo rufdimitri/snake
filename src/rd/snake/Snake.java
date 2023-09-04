@@ -116,11 +116,6 @@ public class Snake {
 			this.position.y = y;
 		}
 
-		public void rotate(double deltaTheta) {
-			this.prevRotation = this.rotation;
-			this.rotation += deltaTheta;
-		}
-
 		public double getRotation() {
 			return rotation;
 		}
@@ -132,6 +127,28 @@ public class Snake {
 		public Snake getSnake() {
 			return snake;
 		}
+	}
+
+	public void move() {
+		final double segmentDistance = segmentSize / 2; // TODO use it to move
+		Point2D.Double pos = getHead().getPosition();
+		Point2D.Double newPos = new Point2D.Double(pos.x, pos.y - moveSpeed);
+		Point2D.Double newPosRotated = GeometryUtil.rotatePoint(newPos, pos, getHead().getRotation());
+		getHead().setPosition(newPosRotated);
+	}
+
+	public void rotate(double deltaTheta) {
+		Segment head = getHead();
+		head.prevRotation = head.rotation;
+		head.rotation += deltaTheta;
+	}
+
+	public void rotateLeft() {
+		rotate(-rotationSpeed);
+	}
+
+	public void rotateRight() {
+		rotate(rotationSpeed);
 	}
 
 	public LinkedList<Segment> getSegments() {

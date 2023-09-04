@@ -123,7 +123,7 @@ public class GUIFrame extends JFrame {
 
 		this.addKeyListener(keyListener);
 		snake.getSegments().add(new Snake.Segment(snake, center, 0)); // manually add head in center of window
-		snake.addSegments(100); // add other segments automatically
+		snake.addSegments(10); // add other segments automatically
 		gameTick();
 		setVisible(true);
 	}
@@ -132,18 +132,15 @@ public class GUIFrame extends JFrame {
 
 	public void gameTick() {
 		if (isKeyLeftPressed) {
-			snake.getHead().rotate(-snake.rotationSpeed);
+			snake.rotateLeft();
 		}
 
 		if (isKeyRightPressed) {
-			snake.getHead().rotate(snake.rotationSpeed);
+			snake.rotateRight();
 		}
 
 		if (isKeyUpPressed) {
-			Point2D.Double pos = snake.getHead().getPosition();
-			Point2D.Double newPos = new Point2D.Double(pos.x, pos.y - snake.moveSpeed);
-			Point2D.Double newPosRotated = rotatePoint(newPos, pos, snake.getHead().getRotation());
-			snake.getHead().setPosition(newPosRotated);
+			snake.move();
 		}
 
 		snake.updateTailPosition();
@@ -157,11 +154,11 @@ public class GUIFrame extends JFrame {
 		g2d.setColor(backgroundColor);
 		g2d.fill(background);
 
-		for (Snake.Segment segment : snake.getSegments()) {
+		snake.getSegments().descendingIterator().forEachRemaining(segment -> {
 			Point2D.Double segmentPos = segment.getPosition();
 
 			// Create Segment Shape
-			Shape segmentShape = getEllipseShape(segment);
+			Shape segmentShape = getRectangeShape(segment);
 
 			g2d.rotate(segment.getRotation(), segmentPos.x, segmentPos.y);
 			// fill Segment
@@ -173,7 +170,7 @@ public class GUIFrame extends JFrame {
 
 			// Revert rotation
 			g2d.rotate(-segment.getRotation(), segmentPos.x, segmentPos.y);
-		}
+		});
 
 		contextRender.repaint();
 		executor.schedule(swingInvokeTickTask, repaintInterval, TimeUnit.MILLISECONDS);
@@ -223,21 +220,6 @@ public class GUIFrame extends JFrame {
 		double y = absoluteY(center.getY() - radius);
 		Ellipse2D.Double myCircle = new Ellipse2D.Double(x, y, 2 * radius, 2 * radius);
 		return myCircle;
-	}
-
-	// A method that takes two points (p and o) and an angle (theta) in radians, and
-	// returns a new point that is the result of rotating p around o by theta
-	public Point2D.Double rotatePoint(Point2D.Double p, Point2D.Double anchorPoint, double theta) {
-		// Calculate the difference between the coordinates of p and o
-		double dx = p.x - anchorPoint.x;
-		double dy = p.y - anchorPoint.y;
-
-		// Apply the rotation matrix formula to get the new coordinates of p'
-		double x = Math.cos(theta) * dx - Math.sin(theta) * dy + anchorPoint.x;
-		double y = Math.sin(theta) * dx + Math.cos(theta) * dy + anchorPoint.y;
-
-		// Create and return a new point with the new coordinates
-		return new Point2D.Double(x, y);
 	}
 
 }
