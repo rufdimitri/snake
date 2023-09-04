@@ -10,6 +10,7 @@ public class Snake {
 
 	public double rotationSpeed = Math.toRadians(10);
 	public double moveSpeed = 10;
+	public double segmentSize = 10;
 
 	public static class Segment {
 		private Point2D.Double position = new Point2D.Double();
@@ -17,19 +18,18 @@ public class Snake {
 
 		private Point2D.Double prevPosition;
 		private double prevRotation; // angle in radian
+		private Snake snake;
 
-		public Segment() {
-		}
-
-		public Segment(Point2D.Double position, double rotation) {
+		public Segment(Snake snake, Point2D.Double position, double rotation) {
 			super();
+			this.snake = snake;
 			this.position.x = position.x;
 			this.position.y = position.y;
 			this.rotation = rotation;
 		}
 
 		public Segment(Segment other) {
-			this(other.position, other.rotation);
+			this(other.snake, other.position, other.rotation);
 		}
 
 		@Override
@@ -47,7 +47,8 @@ public class Snake {
 				return false;
 			Segment other = (Segment) obj;
 			return Objects.equals(position, other.position)
-					&& Double.doubleToLongBits(rotation) == Double.doubleToLongBits(other.rotation);
+					&& Double.doubleToLongBits(rotation) == Double.doubleToLongBits(other.rotation)
+					&& snake == other.snake;
 		}
 
 		public boolean positionEquals(Segment other) {
@@ -126,6 +127,10 @@ public class Snake {
 
 		public double getPrevRotation() {
 			return prevRotation;
+		}
+
+		public Snake getSnake() {
+			return snake;
 		}
 	}
 

@@ -5,6 +5,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -23,6 +24,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
+import rd.snake.Snake.Segment;
 
 public class GUIFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -119,40 +122,11 @@ public class GUIFrame extends JFrame {
 		center = new Point2D.Double(width / 2, height / 2);
 
 		this.addKeyListener(keyListener);
-		snake.getSegments().add(new Snake.Segment(center, 0)); // manually add head in center of window
+		snake.getSegments().add(new Snake.Segment(snake, center, 0)); // manually add head in center of window
 		snake.addSegments(100); // add other segments automatically
 		gameTick();
 		setVisible(true);
 	}
-
-//	public void paint() {
-//
-//		Graphics2D g2d = graphicsContext.createGraphics();
-//		g2d.setRenderingHints(antialiasing);
-//
-//		// clear the background
-//		g2d.setColor(Color.BLACK);
-//		g2d.fillRect(0, 0, graphicsContext.getWidth(), graphicsContext.getHeight());
-//
-//		// set up the circle
-//		double circleRadius = 5;
-////		for (Point point : fractal.points) {
-////			Point2D circleCenter = new Point2D.Double(point.x, point.y);
-////			Ellipse2D circle = getCircleByCenter(circleCenter, circleRadius);
-////			// fill Background
-////			g2d.setColor(Color.GRAY);
-////			g2d.fill(circle);
-////			// draw Stroke
-////			g2d.setColor(Color.DARK_GRAY);
-////			g2d.draw(circle);
-////
-////		}
-//
-//		g2d.dispose();
-//		// force the container for the context to re-paint itself
-//		contextRender.repaint();
-//
-//	}
 
 	double rotation = 0;
 
@@ -172,6 +146,8 @@ public class GUIFrame extends JFrame {
 			snake.getHead().setPosition(newPosRotated);
 		}
 
+		snake.updateTailPosition();
+
 		// Graphics:
 		Graphics2D g2d = (Graphics2D) graphicsContext.getGraphics();
 		g2d.addRenderingHints(antialiasing);
@@ -181,30 +157,46 @@ public class GUIFrame extends JFrame {
 		g2d.setColor(backgroundColor);
 		g2d.fill(background);
 
-//		Rectangle2D.Double head = new Rectangle2D.Double(50, 50, 30, 15);
-
-//		g2d.rotate(rotation, head.getCenterX(), head.getCenterY());
-//		rotation += Math.PI / 180 * 1;
-
 		for (Snake.Segment segment : snake.getSegments()) {
 			Point2D.Double segmentPos = segment.getPosition();
-			// Create Segment-Rectangle
-			Point2D.Double rectangleCorner = new Point2D.Double(segmentPos.x + 5, segmentPos.y - 2);
-			Rectangle2D.Double headRect = new Rectangle2D.Double();
-			headRect.setFrameFromCenter(segmentPos, rectangleCorner);
+
+			// Create Segment Shape
+			Shape segmentShape = getEllipseShape(segment);
 
 			g2d.rotate(segment.getRotation(), segmentPos.x, segmentPos.y);
+			// fill Segment
 			g2d.setColor(Color.GREEN);
-			g2d.draw(headRect);
-//			g2d.setColor(Color.GREEN);
-//			g2d.fill(headRect);
+			g2d.fill(segmentShape);
+			// Draw Segment shape
+			g2d.setColor(Color.green.darker());
+			g2d.draw(segmentShape);
+
+			// Revert rotation
 			g2d.rotate(-segment.getRotation(), segmentPos.x, segmentPos.y);
 		}
 
-		snake.updateTailPosition();
-
 		contextRender.repaint();
 		executor.schedule(swingInvokeTickTask, repaintInterval, TimeUnit.MILLISECONDS);
+	}
+
+	private Shape getRectangeShape(Segment segment) {
+		Point2D.Double segmentPos = segment.getPosition();
+		double segmentSize = segment.getSnake().segmentSize;
+		Point2D.Double rectangleCorner = new Point2D.Double(segmentPos.x + segmentSize / 2,
+				segmentPos.y - segmentSize / 2);
+		Rectangle2D.Double segmentShape = new Rectangle2D.Double();
+		segmentShape.setFrameFromCenter(segmentPos, rectangleCorner);
+		return segmentShape;
+	}
+
+	private Shape getEllipseShape(Segment segment) {
+		Point2D.Double segmentPos = segment.getPosition();
+		double segmentSize = segment.getSnake().segmentSize;
+		Point2D.Double rectangleCorner = new Point2D.Double(segmentPos.x + segmentSize / 2,
+				segmentPos.y - segmentSize / 2);
+		Ellipse2D.Double segmentShape = new Ellipse2D.Double();
+		segmentShape.setFrameFromCenter(segmentPos, rectangleCorner);
+		return segmentShape;
 	}
 
 	private Line2D getVector(Point2D start, double degrees, double length) {
