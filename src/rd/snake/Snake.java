@@ -8,6 +8,9 @@ public class Snake {
 	private LinkedList<Segment> segments = new LinkedList<>();
 	public Snake.Segment updatedTailHead;
 
+	public double rotationSpeed = Math.toRadians(10);
+	public double moveSpeed = 10;
+
 	public static class Segment {
 		private Point2D.Double position = new Point2D.Double();
 		private double rotation; // angle in radian

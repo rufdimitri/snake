@@ -55,8 +55,6 @@ public class GUIFrame extends JFrame {
 		final int K_LEFT = 37;
 		final int K_TOP = 38;
 		final int K_RIGHT = 39;
-		double rotationSpeed = Math.toRadians(10);
-		double moveSpeed = 10;
 
 		@Override
 		public void keyTyped(KeyEvent e) {
@@ -67,20 +65,14 @@ public class GUIFrame extends JFrame {
 			switch (e.getKeyCode()) {
 				case K_LEFT: {
 					isKeyLeftPressed = true;
-//				snake.getHead().rotate(-rotationSpeed);
 					break;
 				}
 				case K_RIGHT: {
 					isKeyRightPressed = true;
-//				snake.getHead().rotate(+rotationSpeed);
 					break;
 				}
 				case K_TOP: {
 					isKeyUpPressed = true;
-//				Point2D.Double pos = snake.getHead().getPosition();
-//				Point2D.Double newPos = new Point2D.Double(pos.x, pos.y - moveSpeed);
-//				Point2D.Double newPosRotated = rotatePoint(newPos, pos, snake.getHead().getRotation());
-//				snake.getHead().setPosition(newPosRotated);
 					break;
 				}
 			}
@@ -128,7 +120,7 @@ public class GUIFrame extends JFrame {
 
 		this.addKeyListener(keyListener);
 		snake.getSegments().add(new Snake.Segment(center, 0)); // manually add head in center of window
-		snake.addSegments(10); // add other segments automatically
+		snake.addSegments(100); // add other segments automatically
 		gameTick();
 		setVisible(true);
 	}
@@ -165,9 +157,20 @@ public class GUIFrame extends JFrame {
 	double rotation = 0;
 
 	public void gameTick() {
-		// TODO
-		isKeyLeftPressed = true;
-		snake.getHead().rotate(-rotationSpeed);
+		if (isKeyLeftPressed) {
+			snake.getHead().rotate(-snake.rotationSpeed);
+		}
+
+		if (isKeyRightPressed) {
+			snake.getHead().rotate(snake.rotationSpeed);
+		}
+
+		if (isKeyUpPressed) {
+			Point2D.Double pos = snake.getHead().getPosition();
+			Point2D.Double newPos = new Point2D.Double(pos.x, pos.y - snake.moveSpeed);
+			Point2D.Double newPosRotated = rotatePoint(newPos, pos, snake.getHead().getRotation());
+			snake.getHead().setPosition(newPosRotated);
+		}
 
 		// Graphics:
 		Graphics2D g2d = (Graphics2D) graphicsContext.getGraphics();
@@ -186,7 +189,7 @@ public class GUIFrame extends JFrame {
 		for (Snake.Segment segment : snake.getSegments()) {
 			Point2D.Double segmentPos = segment.getPosition();
 			// Create Segment-Rectangle
-			Point2D.Double rectangleCorner = new Point2D.Double(segmentPos.x + 5, segmentPos.y - 10);
+			Point2D.Double rectangleCorner = new Point2D.Double(segmentPos.x + 5, segmentPos.y - 2);
 			Rectangle2D.Double headRect = new Rectangle2D.Double();
 			headRect.setFrameFromCenter(segmentPos, rectangleCorner);
 
