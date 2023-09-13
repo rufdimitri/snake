@@ -171,12 +171,12 @@ public class GUIFrame extends JFrame {
 				shapes = getSegmentShapes(segment);
 			}
 			for (GraphicShape shape : shapes) {
-				if (shape.fill) {
+				if (shape.fillColor != null) {
 					// fill Segment
 					g2d.setColor(shape.fillColor);
 					g2d.fill(shape.shape);
 				}
-				if (shape.line) {
+				if (shape.lineColor != null) {
 					// Draw Segment shape
 					g2d.setColor(shape.lineColor);
 					g2d.draw(shape.shape);
@@ -212,11 +212,12 @@ public class GUIFrame extends JFrame {
 	}
 
 	private List<GraphicShape> getHeadShapes(Segment segment) {
-		List<GraphicShape> shapes = new ArrayList<>();
+		List<GraphicShape> graphicShapes = new ArrayList<>();
 
 		// create head
 		Shape headShape = getEllipseShape(segment);
-		// TODO GraphicShape for head
+		GraphicShape head = new GraphicShape(headShape, Color.green, Color.green.darker());
+		graphicShapes.add(head);
 
 		Point2D.Double segmentPos = segment.getPosition();
 		double segmentSize = segment.getSnake().segmentSize;
@@ -226,11 +227,11 @@ public class GUIFrame extends JFrame {
 		double eyePosDeltaY = segmentSize / 10;
 		Ellipse2D.Double leftEye = new Ellipse2D.Double(segmentPos.x - eyePosDeltaX - eyeSize / 2,
 				segmentPos.y - eyePosDeltaY - eyeSize / 2, eyeSize, eyeSize);
-		shapes.add(leftEye);
+		graphicShapes.add(new GraphicShape(leftEye, Color.green.darker(), Color.green.darker()));
 
 		Ellipse2D.Double rightEye = new Ellipse2D.Double(segmentPos.x + eyePosDeltaX - eyeSize / 2,
 				segmentPos.y - eyePosDeltaY - eyeSize / 2, eyeSize, eyeSize);
-		shapes.add(rightEye);
+		graphicShapes.add(new GraphicShape(rightEye, Color.green.darker(), Color.green.darker()));
 
 		double mouthSizeX = segmentSize / 3;
 		double mouthSizeY = segmentSize / 3;
@@ -238,8 +239,19 @@ public class GUIFrame extends JFrame {
 		double mouthPosDeltaY = segmentSize / 3;
 		Arc2D.Double mouth = new Arc2D.Double(segmentPos.x - mouthPosDeltaX, segmentPos.y - mouthPosDeltaY, mouthSizeX,
 				mouthSizeY, 0, 180, Arc2D.Double.OPEN);
-		shapes.add(mouth);
-		return shapes;
+		graphicShapes.add(new GraphicShape(mouth, null, Color.green.darker()));
+		return graphicShapes;
+	}
+
+	private List<GraphicShape> getSegmentShapes(Segment segment) {
+		List<GraphicShape> graphicShapes = new ArrayList<>();
+
+		// create head
+		Shape segmentShape = getEllipseShape(segment);
+		GraphicShape segmentGraphic = new GraphicShape(segmentShape, Color.green, Color.green.darker());
+		graphicShapes.add(segmentGraphic);
+
+		return graphicShapes;
 	}
 
 	private Line2D getVector(Point2D start, double degrees, double length) {
