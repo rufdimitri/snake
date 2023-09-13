@@ -9,6 +9,7 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Arc2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -160,28 +161,29 @@ public class GUIFrame extends JFrame {
 		snake.getSegments().descendingIterator().forEachRemaining(segment -> {
 			Point2D.Double segmentPos = segment.getPosition();
 
-			// Create Segment Shape
-			Shape segmentShape = getEllipseShape(segment);
-
+			// Rotate canvas to show correct Segment/Head rotation
 			g2d.rotate(segment.getRotation(), segmentPos.x, segmentPos.y);
-			// fill Segment
-			g2d.setColor(Color.GREEN);
-			g2d.fill(segmentShape);
-			// Draw Segment shape
-			g2d.setColor(Color.green.darker());
-			g2d.draw(segmentShape);
 
+			List<GraphicShape> shapes = null;
 			if (segment.getSegmentId() == 0) { // first Segment = Kopf
-				List<Shape> eyes = getEyesShape(segment);
-				for (Shape shape : eyes) {
-					g2d.setColor(Color.green.darker());
-					g2d.fill(shape);
-					g2d.setColor(Color.green.darker());
-					g2d.draw(shape);
+				shapes = getHeadShapes(segment);
+			} else {
+				shapes = getSegmentShapes(segment);
+			}
+			for (GraphicShape shape : shapes) {
+				if (shape.fill) {
+					// fill Segment
+					g2d.setColor(shape.fillColor);
+					g2d.fill(shape.shape);
+				}
+				if (shape.line) {
+					// Draw Segment shape
+					g2d.setColor(shape.lineColor);
+					g2d.draw(shape.shape);
 				}
 			}
 
-			// Revert rotation
+			// Revert canvas rotation
 			g2d.rotate(-segment.getRotation(), segmentPos.x, segmentPos.y);
 		});
 
@@ -209,8 +211,12 @@ public class GUIFrame extends JFrame {
 		return segmentShape;
 	}
 
-	private List<Shape> getEyesShape(Segment segment) {
-		List<Shape> shapes = new ArrayList<>();
+	private List<GraphicShape> getHeadShapes(Segment segment) {
+		List<GraphicShape> shapes = new ArrayList<>();
+
+		// create head
+		Shape headShape = getEllipseShape(segment);
+		// TODO GraphicShape for head
 
 		Point2D.Double segmentPos = segment.getPosition();
 		double segmentSize = segment.getSnake().segmentSize;
@@ -225,6 +231,14 @@ public class GUIFrame extends JFrame {
 		Ellipse2D.Double rightEye = new Ellipse2D.Double(segmentPos.x + eyePosDeltaX - eyeSize / 2,
 				segmentPos.y - eyePosDeltaY - eyeSize / 2, eyeSize, eyeSize);
 		shapes.add(rightEye);
+
+		double mouthSizeX = segmentSize / 3;
+		double mouthSizeY = segmentSize / 3;
+		double mouthPosDeltaX = mouthSizeX / 2;
+		double mouthPosDeltaY = segmentSize / 3;
+		Arc2D.Double mouth = new Arc2D.Double(segmentPos.x - mouthPosDeltaX, segmentPos.y - mouthPosDeltaY, mouthSizeX,
+				mouthSizeY, 0, 180, Arc2D.Double.OPEN);
+		shapes.add(mouth);
 		return shapes;
 	}
 
