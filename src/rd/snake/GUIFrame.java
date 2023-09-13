@@ -14,6 +14,8 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -123,6 +125,7 @@ public class GUIFrame extends JFrame {
 
 		this.addKeyListener(keyListener);
 		snake.getSegments().add(new Snake.Segment(snake, center, 0)); // manually add head in center of window
+		snake.segmentSize = 20;
 		snake.addSegments(10); // add other segments automatically
 		gameTick();
 		setVisible(true);
@@ -158,7 +161,7 @@ public class GUIFrame extends JFrame {
 			Point2D.Double segmentPos = segment.getPosition();
 
 			// Create Segment Shape
-			Shape segmentShape = getRectangeShape(segment);
+			Shape segmentShape = getEllipseShape(segment);
 
 			g2d.rotate(segment.getRotation(), segmentPos.x, segmentPos.y);
 			// fill Segment
@@ -167,6 +170,16 @@ public class GUIFrame extends JFrame {
 			// Draw Segment shape
 			g2d.setColor(Color.green.darker());
 			g2d.draw(segmentShape);
+
+			if (segment.getSegmentId() == 0) { // first Segment = Kopf
+				List<Shape> eyes = getEyesShape(segment);
+				for (Shape shape : eyes) {
+					g2d.setColor(Color.green.darker());
+					g2d.fill(shape);
+					g2d.setColor(Color.green.darker());
+					g2d.draw(shape);
+				}
+			}
 
 			// Revert rotation
 			g2d.rotate(-segment.getRotation(), segmentPos.x, segmentPos.y);
@@ -194,6 +207,25 @@ public class GUIFrame extends JFrame {
 		Ellipse2D.Double segmentShape = new Ellipse2D.Double();
 		segmentShape.setFrameFromCenter(segmentPos, rectangleCorner);
 		return segmentShape;
+	}
+
+	private List<Shape> getEyesShape(Segment segment) {
+		List<Shape> shapes = new ArrayList<>();
+
+		Point2D.Double segmentPos = segment.getPosition();
+		double segmentSize = segment.getSnake().segmentSize;
+
+		double eyeSize = segmentSize / 10;
+		double eyePosDeltaX = segmentSize / 3;
+		double eyePosDeltaY = segmentSize / 10;
+		Ellipse2D.Double leftEye = new Ellipse2D.Double(segmentPos.x - eyePosDeltaX - eyeSize / 2,
+				segmentPos.y - eyePosDeltaY - eyeSize / 2, eyeSize, eyeSize);
+		shapes.add(leftEye);
+
+		Ellipse2D.Double rightEye = new Ellipse2D.Double(segmentPos.x + eyePosDeltaX - eyeSize / 2,
+				segmentPos.y - eyePosDeltaY - eyeSize / 2, eyeSize, eyeSize);
+		shapes.add(rightEye);
+		return shapes;
 	}
 
 	private Line2D getVector(Point2D start, double degrees, double length) {

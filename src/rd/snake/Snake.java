@@ -13,6 +13,7 @@ public class Snake {
 	public double segmentSize = 10;
 
 	public static class Segment {
+		private final int segmentId;
 		private Point2D.Double position = new Point2D.Double();
 		private double rotation; // angle in radian
 
@@ -22,6 +23,7 @@ public class Snake {
 
 		public Segment(Snake snake, Point2D.Double position, double rotation) {
 			super();
+			this.segmentId = snake.getSegments().size();
 			this.snake = snake;
 			this.position.x = position.x;
 			this.position.y = position.y;
@@ -126,6 +128,10 @@ public class Snake {
 
 		public Snake getSnake() {
 			return snake;
+		}
+
+		public int getSegmentId() {
+			return segmentId;
 		}
 	}
 
