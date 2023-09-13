@@ -246,7 +246,7 @@ public class GUIFrame extends JFrame {
 	private List<GraphicShape> getSegmentShapes(Segment segment) {
 		List<GraphicShape> graphicShapes = new ArrayList<>();
 
-		// create head
+		// create segment
 		Shape segmentShape = getEllipseShape(segment);
 		GraphicShape segmentGraphic = new GraphicShape(segmentShape, Color.green, Color.green.darker());
 		graphicShapes.add(segmentGraphic);
