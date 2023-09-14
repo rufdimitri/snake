@@ -43,7 +43,7 @@ public class GUIFrame extends JFrame {
 
 	private int repaintInterval = 25;
 
-	Snake snake = new Snake();
+	World world;
 
 	final ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(1);
 	final Runnable gameTickTask = () -> gameTick();
@@ -122,19 +122,17 @@ public class GUIFrame extends JFrame {
 		this.pack();
 		this.setLocationRelativeTo(null); // place window in center of screen
 
-		center = new Point2D.Double(width / 2, height / 2);
-
 		this.addKeyListener(keyListener);
-		snake.getSegments().add(new Snake.Segment(snake, center, 0)); // manually add head in center of window
-		snake.segmentSize = 20;
-		snake.addSegments(10); // add other segments automatically
+
+		world = new World(width, height);
+		world.createEntities();
+
 		gameTick();
 		setVisible(true);
 	}
 
-	double rotation = 0;
-
 	public void gameTick() {
+		Snake snake = world.snake;
 		if (isKeyLeftPressed) {
 			snake.rotateLeft();
 		}
