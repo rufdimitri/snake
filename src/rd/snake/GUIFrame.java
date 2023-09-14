@@ -273,10 +273,7 @@ public class GUIFrame extends JFrame {
 	}
 
 	private Ellipse2D getCircleByCenter(Point2D center, double radius) {
-		// TODO fix coords
-		double x = absoluteX(center.getX() - radius);
-		double y = absoluteY(center.getY() - radius);
-		Ellipse2D.Double myCircle = new Ellipse2D.Double(x, y, 2 * radius, 2 * radius);
+		Ellipse2D.Double myCircle = new Ellipse2D.Double(center.getX(), center.getY(), 2 * radius, 2 * radius);
 		return myCircle;
 	}
 
