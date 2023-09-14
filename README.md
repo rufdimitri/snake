@@ -1,3 +1,3 @@
-This is a repository to learn and experiment with Java.
+Creating a snake game.
 
-created: 24.07.2023
+Repo created: 14.09.2023
