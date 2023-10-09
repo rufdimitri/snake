@@ -23,23 +23,25 @@ public class World {
 	}
 
 	public void createEntities() {
+		// Create Snake
 		snake = new Snake();
 		snake.getSegments().add(new Snake.Segment(snake, center, 0)); // manually add head in center of World
 		snake.segmentSize = 20;
 		snake.addSegments(10); // add other segments automatically
+
+		// Generate Food
+		addRandomFood(100);
 	}
 
 	public void addRandomFood(int count) {
 		for (int i = 0; i < count; i++) {
-			this.food.add(createRandomFood());
+			this.food.add(new Food(getRandomLocation(Food.sizeFromEnergy(Food.ENERGY_MAX))));
 		}
 	}
 
-	public Food createRandomFood() {
-		int energy = random.nextInt(Food.ENERGY_MIN, Food.ENERGY_MAX);
-		double x = random.nextDouble(width);
-		double y = random.nextDouble(height);
-		Point2D.Double location = new Point2D.Double(x, y);
-		return new Food(location, energy);
+	public Point2D.Double getRandomLocation(double borderWidth) {
+		double x = random.nextDouble(0 + borderWidth, width - borderWidth);
+		double y = random.nextDouble(0 + borderWidth, height - borderWidth);
+		return new Point2D.Double(x, y);
 	}
 }

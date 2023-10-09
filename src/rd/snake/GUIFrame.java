@@ -156,6 +156,12 @@ public class GUIFrame extends JFrame {
 		g2d.setColor(backgroundColor);
 		g2d.fill(background);
 
+		// Draw Food
+		for (Food food : world.food) {
+
+		}
+
+		// Draw Snake
 		snake.getSegments().descendingIterator().forEachRemaining(segment -> {
 			Point2D.Double segmentPos = segment.getPosition();
 
@@ -187,6 +193,14 @@ public class GUIFrame extends JFrame {
 
 		contextRender.repaint();
 		executor.schedule(swingInvokeTickTask, repaintInterval, TimeUnit.MILLISECONDS);
+	}
+
+	private Shape getFoodShape(Food food) {
+		Point2D.Double pos = food.position;
+		double size = food.
+		Point2D.Double rectangleCorner = new Point2D.Double(pos.x + segmentSize / 2, pos.y - segmentSize / 2);
+		Ellipse2D.Double segmentShape = new Ellipse2D.Double();
+		segmentShape.setFrameFromCenter(pos, rectangleCorner);
 	}
 
 	private Shape getRectangeShape(Segment segment) {
