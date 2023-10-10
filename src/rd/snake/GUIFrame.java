@@ -57,6 +57,9 @@ public class GUIFrame extends JFrame {
 	boolean isKeyUpPressed = false;
 	boolean isKeyRightPressed = false;
 
+	public final Color FOOD_COLOR = new Color(227, 214, 50);
+//	public final Color FOOD_COLOR = Color.getHSBColor(1 - 0.53f, 0.73f, 0.65f);
+
 	final KeyListener keyListener = new KeyListener() {
 		final int K_LEFT = 37;
 		final int K_TOP = 38;
@@ -158,7 +161,7 @@ public class GUIFrame extends JFrame {
 
 		// Draw Food
 		for (Food food : world.food) {
-
+			getFoodShape(food).drawOn(g2d);
 		}
 
 		// Draw Snake
@@ -175,16 +178,7 @@ public class GUIFrame extends JFrame {
 				shapes = getSegmentShapes(segment);
 			}
 			for (GraphicShape shape : shapes) {
-				if (shape.fillColor != null) {
-					// fill Segment
-					g2d.setColor(shape.fillColor);
-					g2d.fill(shape.shape);
-				}
-				if (shape.lineColor != null) {
-					// Draw Segment shape
-					g2d.setColor(shape.lineColor);
-					g2d.draw(shape.shape);
-				}
+				shape.drawOn(g2d);
 			}
 
 			// Revert canvas rotation
@@ -195,12 +189,12 @@ public class GUIFrame extends JFrame {
 		executor.schedule(swingInvokeTickTask, repaintInterval, TimeUnit.MILLISECONDS);
 	}
 
-	private Shape getFoodShape(Food food) {
+	private GraphicShape getFoodShape(Food food) {
 		Point2D.Double pos = food.position;
-		double size = food.
-		Point2D.Double rectangleCorner = new Point2D.Double(pos.x + segmentSize / 2, pos.y - segmentSize / 2);
-		Ellipse2D.Double segmentShape = new Ellipse2D.Double();
-		segmentShape.setFrameFromCenter(pos, rectangleCorner);
+		Point2D.Double rectangleCorner = new Point2D.Double(pos.x + food.size / 2, pos.y - food.size / 2);
+		Ellipse2D.Double shape = new Ellipse2D.Double();
+		shape.setFrameFromCenter(pos, rectangleCorner);
+		return new GraphicShape(shape, FOOD_COLOR, FOOD_COLOR.darker());
 	}
 
 	private Shape getRectangeShape(Segment segment) {
